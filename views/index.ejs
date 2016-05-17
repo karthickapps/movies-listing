@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="mediaApp">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="description" content="">
+        <title>Movies</title>
+
+        <link href="assets/css/main.css" rel="stylesheet">
+        <link rel="stylesheet" type="text/css" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1/themes/flick/jquery-ui.css">
+        <link rel="stylesheet" type="text/css" href="http://netdna.bootstrapcdn.com/bootstrap/3.0.3/css/bootstrap.min.css">
+        <link href="libs/bower_components/angular-mass-autocomplete/massautocomplete.theme.css" rel="stylesheet">
+
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.0.1/jquery.js"></script>
+        <script src="http://code.jquery.com/ui/1.11.1/jquery-ui.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.0.3/js/bootstrap.min.js"></script>
+        <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
+        <script src="libs/bower_components/angular-mass-autocomplete/massautocomplete.js"></script>
+        <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.2.16/angular-sanitize.js"></script>
+        <script type="text/javascript" src="assets/js/main.js"></script>
+    </head>
+    <body>
+        <div class="container">
+            <div class="row">
+                <!-- start of search component -->
+                <div id="select-bar">
+                    <div class="col-md-4" ng-controller="SearchCtrl">
+                        <div class="row search-bar" mass-autocomplete>
+                            <label for="search-input">
+                                <i class="fa fa-search" aria-hidden="true"></i>
+                                <span class="sr-only">Search</span>
+                            </label>
+                            <div>
+                             <i class="search-icon glyphicon glyphicon-search"></i>
+                            <input type="text" placeholder="Search" ng-model="dirty.keyword"
+                                mass-autocomplete-item="autocompleteOptions" ng-keyup="search(dirty.keyword, $event)"/><span ng-if="dirty.keyword!==''" class="clear-icon" ng-click="clearValue()" title="Clear">&times;</span>
+                            </div>    
+                        </div>
+                        <div class="row">
+                            <table class="selectpicker" id="genre">
+                                <tr ng-click="filterByGenre('All')">
+                                    <td>
+                                        <span>All</span><span><img class="hideArrow" src="/assets/images/arrow.png"/></span>
+                                    </td>
+                                </tr>
+                                <tr ng-click="filterByGenre('Action')">
+                                    <td>
+                                        <span>Action</span><span><img class="hideArrow" src="/assets/images/arrow.png"/></span>
+                                    </td>
+                                </tr>
+                                <tr ng-click="filterByGenre('Crime')">
+                                    <td>
+                                        <span>Crime</span><span><img class="hideArrow" src="/assets/images/arrow.png"/></span>
+                                    </td>
+                                </tr>
+                                <tr ng-click="filterByGenre('Drama')">
+                                    <td>
+                                        <span>Drama</span><span><img class="hideArrow" src="/assets/images/arrow.png"/></span>
+                                    </td>
+                                </tr>
+                                <tr ng-click="filterByGenre('Mystery')">
+                                    <td>
+                                        <span>Mystery</span><span><img class="hideArrow" src="/assets/images/arrow.png"/></span>
+                                    </td>
+                                </tr>
+                                <tr ng-click="filterByGenre('Sci-Fi')">
+                                    <td>
+                                        <span>Sci-Fi</span><span><img class="hideArrow" src="/assets/images/arrow.png"/></span>
+                                    </td>
+                                </tr>
+                                <tr ng-click="filterByGenre('Adventure')">
+                                    <td>
+                                        <span>Adventure</span><span><img class="hideArrow" src="/assets/images/arrow.png"/>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <!-- end of search component -->
+                <!-- start of movie list component -->
+                <div class="col-md-8" ng-controller="MovieCtrl">
+                    <div class="row" id="movielList">
+                        <div ng-if="showLoading === true">
+                            <img src="assets/images/loading.gif">
+                        </div>
+                        <div class="col-md-4 movie-results-block movie-cursor" ng-repeat="movie in movieList | filterByGenre" data-toggle="modal" data-target="#editMoviedetails"  ng-click="editMovie(movie)"> 
+                            <div class="movie-title"> 
+                                <h2 class="movie-title-h2 Title">{{movie.Title}}</h2> 
+                            </div> 
+                            <div class="movie-box"> 
+                                <div class="row movie-thumb"> 
+                                    <img ng-if="movie.Poster !== 'N/A'" ng-src="{{movie.Poster}}" class="img-responsive">
+                                    <img ng-if="movie.Poster === 'N/A'" ng-src="/assets/images/noposter.jpg" class="img-responsive"> 
+                                </div>
+                                <div class="row text-center" rating rating-value="movie.imdbRating | roundRating" max="5"></div>
+                                <div class="row movie-description"> 
+                                    <p class="year">
+                                        <label for="year">Year:</label>
+                                        <span class="year-1 Year">{{movie.Year}}</span> 
+                                    </p> 
+                                    <p class="genre"> 
+                                        <label for="genre">Genre:</label> 
+                                        <span class="genre-1">{{movie.Genre}}</span> 
+                                    </p> 
+                                    <p class="year"> 
+                                        <label for="director">Director:</label> 
+                                        <span class="director-1">{{movie.Director}}</span> 
+                                    </p> 
+                                    <p class="actors"> 
+                                        <label for="actors">Actors:</label> 
+                                        <span class="actors-1">{{movie.Actors}}</span> 
+                                    </p> 
+                                    <p class="plot"> 
+                                        <label for="plot">Plot:</label> 
+                                        <span class="plot-1">{{movie.Plot}}</span>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Start of edit movie modal-->
+                    <div id="editMoviedetails" class="modal fade" role="dialog">
+                        <div class="modal-dialog modalBox">
+                            <div class="movie-results-block">
+                                    <button type="button" class="closeModal" data-dismiss="modal">&times;</button>
+                                    <h4 class="modal-title movie-title" >{{movieDetail.Title}}</h4>
+                                <div class="movie-box"> 
+                                    <div class="movie-thumb"> 
+                                        <img ng-if="movieDetail.Poster !== 'N/A'" ng-src="{{movieDetail.Poster}}" class="img-responsive">
+                                        <img ng-if="movieDetail.Poster === 'N/A'" ng-src="/assets/images/noposter.jpg" class="img-responsive"> 
+                                    </div>
+                                    <div class="text-center" rating rating-value="movieDetail.imdbRating | roundRating" max="5"></div>
+                                    <div class="row movie-description">
+                                        <form> 
+                                            <table>
+                                                <tr class="year">
+                                                    <td><label for="year">Year:</label></td>
+                                                    <td><input class="year-1 Year inputBorder" ng-model="movieDetail.Year"/></td> 
+                                                </tr> 
+                                                <tr class="genre"> 
+                                                    <td><label for="genre">Genre:</label></td>
+                                                    <td><input class="genre-1 inputBorder" ng-model="movieDetail.Genre"/></td>
+                                                </tr> 
+                                                <tr class="year"> 
+                                                    <td><label for="director">Director:</label></td> 
+                                                    <td><input class="director-1 inputBorder" ng-model="movieDetail.Director"/></td> 
+                                                </tr> 
+                                                <tr class="actors"> 
+                                                    <td><label for="actors">Actors:</label></td>
+                                                    <td><textarea class="actors-1 inputBorder" ng-model="movieDetail.Actors"></textarea></td> 
+                                                </tr> 
+                                                <tr class="plot"> 
+                                                    <td><label for="plot">Plot:</label></td> 
+                                                    <td><textarea class="plot-1 inputBorder" ng-model="movieDetail.Plot"></textarea></td>
+                                                </tr>
+                                                <tr>
+                                                    <td></td>
+                                                    <td>
+                                                        <div class="pull-right">
+                                                            <button data-dismiss="modal" class="btn btn-info btnBorder">Reset</button>
+                                                            <button class="btn btn-info btnBorder" ng-click="saveMovie(movieDetail)">save</button>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                            </table>
+                                        </form> 
+                                    </div>
+                                </div>  
+                            </div>
+                        </div>
+                    </div>
+                    <!--End of edit movie modal -->       
+                </div>
+                <!-- end of movie list component -->
+            </div>
+        </div>
+    </body>
+</html>
