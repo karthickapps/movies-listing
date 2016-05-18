@@ -8,7 +8,7 @@ app.factory("DataService", ['$http' , '$q', function($http, $q){
 	        var deferred = $q.defer();
 	        $http({
 	            method: 'GET',
-	            url: "http://www.omdbapi.com/?"+queryString
+	            url: "https://www.omdbapi.com/?"+queryString
 	        }).
 	        success(function (data, status, headers, config) {
 	            deferred.resolve(data);
@@ -26,7 +26,7 @@ app.factory("DataService", ['$http' , '$q', function($http, $q){
 			    var queryString = "s="+searchKeyword;
 				$http({
 		            method: 'GET',
-		            url: "http://www.omdbapi.com/?"+queryString
+		            url: "https://www.omdbapi.com/?"+queryString
 		        })
 		        .success(function (data, status, headers, config) {
 		            if(data.Response === "True" && data.Search && data.Search.length){
