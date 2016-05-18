@@ -94,7 +94,7 @@ app.filter("filterByGenre", ["Genre", function(Genre){
 		var genre = Genre.getSelectedGenre();
 		if(genre === "All"){
 			return movies;
-		}else if(genre && movies.length > 0){
+		}else if(genre && movies && movies.length > 0){
 			var moviesFilter = [];
 			movies.forEach(function(value){
 				if(value.Genre.includes(genre)){
