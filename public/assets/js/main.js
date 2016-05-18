@@ -94,7 +94,7 @@ app.filter("filterByGenre", ["Genre", function(Genre){
 		var genre = Genre.getSelectedGenre();
 		if(genre === "All"){
 			return movies;
-		}else if(genre){
+		}else if(genre && movies.length > 0){
 			var moviesFilter = [];
 			movies.forEach(function(value){
 				if(value.Genre.includes(genre)){
@@ -102,6 +102,8 @@ app.filter("filterByGenre", ["Genre", function(Genre){
 				}
 			});
 			return moviesFilter;
+		}else{
+			return [];
 		}
 	};
 }]);
